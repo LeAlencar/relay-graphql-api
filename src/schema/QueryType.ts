@@ -4,7 +4,7 @@ import { connectionArgs, connectionFromArray } from 'graphql-relay';
 import { TransactionConnection } from '../modules/transaction/TransactionType';
 import { nodeField, nodesField } from '../modules/node/NodeInterface'
 import TransactionModel from '../modules/transaction/TransactionModel';
-import { userType } from '../modules/user/UserType';
+import { UserType } from '../modules/user/UserType';
 import UserModel from '../modules/user/UserModel';
 
 const QueryType = new GraphQLObjectType({
@@ -24,7 +24,7 @@ const QueryType = new GraphQLObjectType({
             }
         },
         user: {
-          type: userType,
+          type: UserType,
           resolve: async (_, args, context: any) => {
             if (context.user) {
               const user = await UserModel.findOne({_id: context.user._id})
