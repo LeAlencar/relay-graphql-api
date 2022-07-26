@@ -20,7 +20,7 @@ export const userLogin = mutationWithClientMutationId({
       throw new Error('This user was not registered. Please, try again!');
     }
 
-    
+
     if (!bcrypt.compareSync(password, user.password)) {
       throw new Error('Password incorrect, please try again!');
     }

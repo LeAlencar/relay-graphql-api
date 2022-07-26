@@ -3,7 +3,7 @@ import { fromGlobalId, nodeDefinitions } from "graphql-relay";
 import TransactionModel from "../transaction/TransactionModel";
 import TransactionType from "../transaction/TransactionType";
 import UserModel from "../user/UserModel";
-import { userType } from "../user/UserType";
+import { UserType } from "../user/UserType";
 
 export const { nodeInterface, nodeField, nodesField } = nodeDefinitions(
     async (globalId) => {
@@ -24,7 +24,7 @@ export const { nodeInterface, nodeField, nodesField } = nodeDefinitions(
         }
 
         if (obj instanceof UserModel) {
-          return userType;
+          return UserType;
         }
 
         return null;

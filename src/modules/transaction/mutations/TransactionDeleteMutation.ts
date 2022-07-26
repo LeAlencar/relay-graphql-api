@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { GraphQLNonNull, GraphQLID } from 'graphql';
 
 import { fromGlobalId, mutationWithClientMutationId } from 'graphql-relay';
@@ -12,19 +13,19 @@ const mutation = mutationWithClientMutationId({
       type: new GraphQLNonNull(GraphQLID),
     },
   },
-  mutateAndGetPayload: async ({ transactionId }) => {    
-    const transaction = await TransactionModel.findById({ 
+  mutateAndGetPayload: async ({ transactionId }) => {
+    const transaction = await TransactionModel.findById({
       _id: fromGlobalId(transactionId).id
     });
 
     if (!transaction) {
       return {
-        error: 'Transaction not found', 
+        error: 'Transaction not found',
       };
     }
 
     await TransactionModel.deleteOne({
-      _id: transaction.id 
+      _id: transaction.id
     });
 
     return {
