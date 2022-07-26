@@ -1,5 +1,6 @@
 import { GraphQLNonNull, GraphQLString } from "graphql";
 import { mutationWithClientMutationId } from "graphql-relay";
+import bcrypt from 'bcryptjs';
 import { generateJwtToken } from "../../../auth";
 import UserModel from "../UserModel";
 
@@ -29,10 +30,12 @@ export default mutationWithClientMutationId({
       }
     }
 
+    const hashPassword = bcrypt.hashSync(password, 8);
+
     const user = await new UserModel({
       username,
       email,
-      password
+      password: hashPassword
     }).save()
 
     return {

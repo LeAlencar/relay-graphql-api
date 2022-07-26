@@ -1,5 +1,5 @@
 
-import { GraphQLObjectType } from 'graphql';
+import { GraphQLID, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { connectionArgs, connectionFromArray } from 'graphql-relay';
 import { TransactionConnection } from '../modules/transaction/TransactionType';
 import { nodeField, nodesField } from '../modules/node/NodeInterface'
@@ -25,12 +25,17 @@ const QueryType = new GraphQLObjectType({
         },
         user: {
           type: UserType,
-          resolve: async (_, args, context: any) => {
-            if (context.user) {
-              const user = await UserModel.findOne({_id: context.user._id})
-              return user;
+          args: { 
+            id: {
+              type: new GraphQLNonNull(GraphQLID)
             }
-            return
+          },
+          resolve: async (_, args) => {
+            
+              const user = await UserModel.findOne({_id: args.id})
+              return user;
+            
+            //return
           }
         }
     })
