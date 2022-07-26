@@ -1,3 +1,4 @@
 import userCreate from "./userCreate"
+import { userLogin } from "./userLogin"
 
-export default { userCreate }
+export default { userCreate, userLogin }
