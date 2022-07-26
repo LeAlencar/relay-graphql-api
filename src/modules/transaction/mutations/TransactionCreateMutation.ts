@@ -35,7 +35,7 @@ const mutation = mutationWithClientMutationId({
 
     return {
       error: null,
-      success: 'Transaction created \o/',
+      success: 'Transaction created',
       transaction
     };
   },
@@ -50,7 +50,7 @@ const mutation = mutationWithClientMutationId({
       resolve: response => response.error
     }
   },
-  
+
 });
 
 export default mutation;

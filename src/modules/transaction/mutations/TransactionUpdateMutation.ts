@@ -1,4 +1,4 @@
-import { GraphQLNonNull, GraphQLID, GraphQLString, GraphQLBoolean } from 'graphql';
+import { GraphQLNonNull, GraphQLID, GraphQLString } from 'graphql';
 
 import { fromGlobalId, mutationWithClientMutationId } from 'graphql-relay';
 
@@ -39,7 +39,7 @@ const mutation = mutationWithClientMutationId({
     }
 
     await TransactionModel.updateOne(
-      { 
+      {
         _id: transaction._id
       },
       {

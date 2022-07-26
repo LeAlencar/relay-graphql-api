@@ -1,11 +1,10 @@
 import mongoose from 'mongoose';
-import { database } from '../config';
 import dotenv from "dotenv";
 
 dotenv.config();
 
 export const connectDB = () => {
-  
+
   mongoose.connect(process.env.MONGO_URI);
 
   const db = mongoose.connection;

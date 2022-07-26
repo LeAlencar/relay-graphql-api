@@ -25,16 +25,16 @@ const QueryType = new GraphQLObjectType({
         },
         user: {
           type: UserType,
-          args: { 
+          args: {
             id: {
               type: new GraphQLNonNull(GraphQLID)
             }
           },
           resolve: async (_, args) => {
-            
+
               const user = await UserModel.findOne({_id: args.id})
               return user;
-            
+
             //return
           }
         }

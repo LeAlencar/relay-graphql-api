@@ -15,5 +15,5 @@ import app from './app';
   const server = createServer(app.callback());
 
   server.listen(process.env.PORT, () => console.log('Server running 🚀'));
-  
+
 })();

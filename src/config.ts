@@ -1,5 +1,3 @@
-import dotenv from 'dotenv';
-
 const env = process.env;
 
 export const database = env.MONGO_URI;
