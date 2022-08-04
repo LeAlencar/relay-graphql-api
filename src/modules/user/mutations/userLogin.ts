@@ -17,12 +17,15 @@ export const userLogin = mutationWithClientMutationId({
     const user = await UserModel.findOne({ username });
 
     if (!user) {
-      throw new Error('This user was not registered. Please, try again!');
+      return {
+        error: ('This user was not registered. Please, try again!')
+      }
     }
 
-
     if (!bcrypt.compareSync(password, user.password)) {
-      throw new Error('Password incorrect, please try again!');
+      return {
+        error: ('Password incorrect, please try again!')
+      }
     }
 
     const token = generateJwtToken(user._id);
