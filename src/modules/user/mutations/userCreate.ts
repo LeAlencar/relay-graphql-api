@@ -39,7 +39,7 @@ export default mutationWithClientMutationId({
       password: hashPassword
     }).save()
 
-    sendEmail(username, email)
+    await sendEmail(username, email)
 
     return {
       token: generateJwtToken(user._id),
