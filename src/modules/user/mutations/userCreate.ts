@@ -3,6 +3,7 @@ import { mutationWithClientMutationId } from "graphql-relay";
 import bcrypt from 'bcryptjs';
 import { generateJwtToken } from "../../../auth";
 import UserModel from "../UserModel";
+import { sendEmail } from "../../../email/sendEmail";
 
 
 
@@ -37,6 +38,8 @@ export default mutationWithClientMutationId({
       email,
       password: hashPassword
     }).save()
+
+    sendEmail(username, email)
 
     return {
       token: generateJwtToken(user._id),
