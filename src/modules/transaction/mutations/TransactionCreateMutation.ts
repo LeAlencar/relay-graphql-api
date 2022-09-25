@@ -1,6 +1,7 @@
 import { GraphQLNonNull, GraphQLID, GraphQLString } from 'graphql';
 
 import { mutationWithClientMutationId } from 'graphql-relay';
+import { pubSub } from '../../../PubSub';
 
 import TransactionModel from '../TransactionModel';
 
@@ -27,17 +28,23 @@ const mutation = mutationWithClientMutationId({
 
     const transaction = await new TransactionModel({transactionId, name, category, price}).save();
 
+
     if (!transaction) {
       return {
         error: 'Transaction not found',
       };
     }
 
+    await pubSub.publish("NEW_TRANSACTION", { transactionId: transaction._id})
+
     return {
       error: null,
       success: 'Transaction created',
       transaction
     };
+
+
+
   },
 
   outputFields: {
