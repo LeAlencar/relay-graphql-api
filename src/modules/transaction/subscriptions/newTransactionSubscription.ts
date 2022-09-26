@@ -6,6 +6,7 @@ import TransactionType from "../TransactionType"
 
 type newTransaction = {
   transactionId: string
+  id: string
 }
 
 const TransactionNewSubscription = subscriptionWithClientId({
@@ -14,7 +15,7 @@ const TransactionNewSubscription = subscriptionWithClientId({
   outputFields: {
     transaction: {
       type: TransactionType,
-      resolve: async ({id}: any) => TransactionModel.findOne({_id: id})
+      resolve: async ({id}: newTransaction) => TransactionModel.findOne({_id: id})
     }
   },
   subscribe: () => {
