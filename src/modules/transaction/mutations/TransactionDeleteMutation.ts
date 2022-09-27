@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { GraphQLNonNull, GraphQLID } from 'graphql';
+import { GraphQLNonNull, GraphQLID, GraphQLString } from 'graphql';
 
-import { fromGlobalId, mutationWithClientMutationId } from 'graphql-relay';
+import { fromGlobalId, mutationWithClientMutationId, toGlobalId } from 'graphql-relay';
 
 import TransactionModel from "../TransactionModel"
+import { TransactionEdge } from '../TransactionType';
 
 const mutation = mutationWithClientMutationId({
   name: 'TransactionDelete',
@@ -29,18 +30,33 @@ const mutation = mutationWithClientMutationId({
     });
 
     return {
-      id: transactionId._id,
+      transaction,
       error: null,
       success: 'Transaction removed',
     };
   },
 
   outputFields: {
-    transactionId: {
-      type: GraphQLID,
-      resolve: ({ id }: any) => id,
+    transactionEdge: {
+        type: TransactionEdge,
+        resolve: async (response) => {
+          const transaction = response.transaction
+
+          if (!transaction) {
+            return null;
+          }
+
+          return {
+            cursor: toGlobalId('Transaction', transaction._id),
+            node: transaction,
+          };
+        },
+      },
+      error: {
+        type: GraphQLString,
+        resolve: response => response.error
+      }
     },
-  },
 });
 
 export default mutation;
