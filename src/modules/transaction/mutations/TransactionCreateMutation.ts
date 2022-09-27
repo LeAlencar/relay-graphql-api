@@ -1,7 +1,7 @@
 import { GraphQLNonNull, GraphQLID, GraphQLString } from 'graphql';
 
 import { mutationWithClientMutationId, toGlobalId } from 'graphql-relay';
-import { pubSub } from '../../../PubSub';
+import { pubSub, SUBSCRIPTIONS } from '../../../PubSub';
 import { nodeInterface } from '../../node/NodeInterface';
 
 import TransactionModel from '../TransactionModel';
@@ -36,7 +36,7 @@ const mutation = mutationWithClientMutationId({
       };
     }
 
-    await pubSub.publish("NEW_TRANSACTION", { transactionId: transaction._id})
+    await pubSub.publish(SUBSCRIPTIONS.NEW_TRANSACTION, { transactionId: transaction._id})
 
     return {
       error: null,
