@@ -37,20 +37,16 @@ const mutation = mutationWithClientMutationId({
   },
 
   outputFields: {
-    transactionEdge: {
-        type: TransactionEdge,
+    transactionId: {
+        type: GraphQLID,
         resolve: async (response) => {
           const transaction = response.transaction
-
           if (!transaction) {
-            return null;
+            return null
           }
 
-          return {
-            cursor: toGlobalId('Transaction', transaction._id),
-            node: transaction,
-          };
-        },
+          return toGlobalId('Transaction', transaction._id)
+        }
       },
       error: {
         type: GraphQLString,
