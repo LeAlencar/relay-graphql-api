@@ -1,11 +1,12 @@
 import { GraphQLNonNull, GraphQLID, GraphQLString } from 'graphql';
 
-import { mutationWithClientMutationId } from 'graphql-relay';
+import { mutationWithClientMutationId, toGlobalId } from 'graphql-relay';
 import { pubSub } from '../../../PubSub';
+import { nodeInterface } from '../../node/NodeInterface';
 
 import TransactionModel from '../TransactionModel';
 
-import TransactionType from '../TransactionType';
+import TransactionType, { TransactionEdge } from '../TransactionType';
 
 const mutation = mutationWithClientMutationId({
   name: 'TransactionCreate',
@@ -48,15 +49,29 @@ const mutation = mutationWithClientMutationId({
   },
 
   outputFields: {
-    transaction: {
-      type: TransactionType,
-      resolve: response => response.transaction
+  transactionEdge: {
+      type: TransactionEdge,
+      resolve: async (response) => {
+        // Load new edge from loader
+        const transaction = response.transaction
+
+        // Returns null if no node was loaded
+        if (!transaction) {
+          return null;
+        }
+
+        return {
+          cursor: toGlobalId('Transaction', transaction._id),
+          node: transaction,
+        };
+      },
     },
     error: {
       type: GraphQLString,
       resolve: response => response.error
     }
   },
+
 
 });
 
