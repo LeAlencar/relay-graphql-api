@@ -1,4 +1,4 @@
-import Koa from "koa";
+import Koa, { Context } from "koa";
 import cors from "@koa/cors";
 import Router from "@koa/router";
 import bodyParser from "koa-bodyparser";
@@ -7,6 +7,8 @@ import { getGraphQLParameters, processRequest, renderGraphiQL, sendResult, shoul
 import koaPlayground from 'graphql-playground-middleware-koa';
 
 import { schema } from "./schema/schema";
+import { getUser } from "./auth";
+import { getContext } from "./getContext";
 
 const app = new Koa();
 const router = new Router();
@@ -24,6 +26,15 @@ router.get('/', async ctx => {
   ctx.body = 'Welcome to your koa server'
 })
 
+export const setCookie = (context: Context) => (cookieName: string, token: string) => {
+  const options = {
+    httpOnly: true,
+    path: '/'
+  }
+
+  context.cookies.set(cookieName, token, options)
+}
+
 router.all(
   '/playground',
   koaPlayground({
@@ -32,6 +43,8 @@ router.all(
 );
 
 router.all('/graphql', async ctx => {
+  const { user } = await getUser(ctx.headers.authorization)
+
   const request = {
     body: ctx.request.body,
     headers: ctx.req.headers,
@@ -52,6 +65,14 @@ router.all('/graphql', async ctx => {
       variables,
       request,
       schema,
+      contextFactory: () => {
+        return getContext({
+          req: request,
+          user,
+          koaContext: ctx,
+          setCookie: setCookie(ctx)
+        })
+      }
     });
 
     ctx.respond = false;
