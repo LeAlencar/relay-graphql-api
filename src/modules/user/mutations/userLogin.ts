@@ -3,6 +3,7 @@ import { GraphQLString, GraphQLNonNull } from 'graphql';
 import bcrypt from 'bcryptjs';
 
 import UserModel from '../UserModel';
+import * as UserLoader from '../UserLoader'
 import { UserType } from '../UserType';
 
 import { generateJwtToken } from '../../../auth';
@@ -10,11 +11,11 @@ import { generateJwtToken } from '../../../auth';
 export const userLogin = mutationWithClientMutationId({
   name: 'UserLogin',
   inputFields: {
-    username: { type: new GraphQLNonNull(GraphQLString) },
+    email: { type: new GraphQLNonNull(GraphQLString) },
     password: { type: new GraphQLNonNull(GraphQLString) },
   },
-  mutateAndGetPayload: async ({ username, password }) => {
-    const user = await UserModel.findOne({ username });
+  mutateAndGetPayload: async ({ email, password }, context) => {
+    const user = await UserModel.findOne({ email: email.trim().toLowerCase() });
 
     if (!user) {
       return {
@@ -29,6 +30,7 @@ export const userLogin = mutationWithClientMutationId({
     }
 
     const token = generateJwtToken(user._id);
+    context.setCookie("login", token)
 
     return {
       token,
@@ -42,7 +44,9 @@ export const userLogin = mutationWithClientMutationId({
     },
     me: {
       type: UserType,
-      resolve: ({ user }) => user,
+      resolve: async ({ user }, _, context) => {
+        return await UserLoader.load(context, user._id)
+      },
     },
   },
 });
