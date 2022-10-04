@@ -7,6 +7,8 @@ import {
 } from 'graphql'
 import { connectionDefinitions, globalIdField } from 'graphql-relay'
 import { nodeInterface } from '../node/NodeInterface'
+import { registerTypeLoader } from '../node/typeRegister'
+import { load } from './UserLoader'
 
 
 export const UserType = new GraphQLObjectType({
@@ -42,6 +44,8 @@ export const userInputType: ThunkObjMap<GraphQLInputFieldConfig> = {
     description: `User's password`
   }
 }
+
+registerTypeLoader(UserType, load)
 
 export const { connectionType: UserConnection, edgeType: UserEdge } = connectionDefinitions({
   nodeType: UserType

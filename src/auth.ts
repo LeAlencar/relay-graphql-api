@@ -1,18 +1,24 @@
 import jwt from 'jsonwebtoken'
 import { jwtSecret } from './config';
-import UserModel from './modules/user/UserModel';
+import UserModel, { IUser } from './modules/user/UserModel';
 
-export const getUser = async (token: string) => {
-  if (!token) return null;
+export const getUser = async (token: string | null | undefined) => {
+  if (!token) return { user: null};
 
-  const decodedToken = jwt.verify(token.substring(4), jwtSecret) as { id: string }
+  try {
+    const decodedToken = jwt.verify(token.substring(4), jwtSecret)
 
-  const user = await UserModel.findOne({_id: decodedToken.id })
+    const user = await UserModel.findOne({_id: (decodedToken as { id:string }).id })
 
-  if (!user) return null
-
-  return user
+    return {
+      user
+    }
+  } catch(err) {
+    return { user: null}
+  }
 
 }
 
-export const generateJwtToken = (userId: string) => `JWT ${jwt.sign({ id: userId }, jwtSecret)}`
+export const generateJwtToken = (user: IUser) => {
+  return `JWT ${jwt.sign({ id: user._id }, jwtSecret)}`
+}
