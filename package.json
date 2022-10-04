@@ -15,10 +15,12 @@
     ]
   },
   "dependencies": {
+    "@entria/graphql-mongo-helpers": "^1.1.2",
     "@koa/cors": "^3.3.0",
     "@koa/router": "^11.0.1",
     "@types/ws": "^8.5.3",
     "bcryptjs": "^2.4.3",
+    "dataloader": "^2.1.0",
     "dotenv": "^16.0.1",
     "graphql": "^16.5.0",
     "graphql-helix": "^1.13.0",

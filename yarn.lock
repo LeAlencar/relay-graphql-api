@@ -16,6 +16,18 @@
   dependencies:
     "@jridgewell/trace-mapping" "0.3.9"
 
+"@entria/graphql-mongo-helpers@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@entria/graphql-mongo-helpers/-/graphql-mongo-helpers-1.1.2.tgz#89fba277efaf52f3f2ccba07f8349d741a6bda2d"
+  integrity sha512-MkQJdl4/FCAfRx0a5SmDuv+yT+ers9ZleIBYHswwVaCeTXbQQRJxLRQd13yawFfGS1XOZCEzvCsbjQididn/Gg==
+  dependencies:
+    "@entria/graphql-mongoose-loader" "^4.3.2"
+
+"@entria/graphql-mongoose-loader@^4.3.2":
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/@entria/graphql-mongoose-loader/-/graphql-mongoose-loader-4.4.0.tgz#eb420b82f9889a7d916fc74d4a8437dfba7daabd"
+  integrity sha512-RcNdqPQf/GlnQch1IyUOTMTw13k+zE7zK9JeMd5cUGnShI/ih4k1JZEEtJDwyRwW1bOqAhlmP8dyY1CY8iPX8Q==
+
 "@eslint/eslintrc@^1.3.0":
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/@eslint/eslintrc/-/eslintrc-1.3.0.tgz#29f92c30bb3e771e4a2048c95fa6855392dfac4f"
@@ -890,6 +902,11 @@ cssfilter@0.0.10:
   version "0.0.10"
   resolved "https://registry.yarnpkg.com/cssfilter/-/cssfilter-0.0.10.tgz#c6d2672632a2e5c83e013e6864a42ce8defd20ae"
   integrity sha512-FAaLDaplstoRsDR8XGYH51znUN0UY7nMc6Z9/fvE8EXGwvJE9hu7W2vHwx1+bd6gCYnln9nLbzxFTrcO9YQDZw==
+
+dataloader@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/dataloader/-/dataloader-2.1.0.tgz#c69c538235e85e7ac6c6c444bae8ecabf5de9df7"
+  integrity sha512-qTcEYLen3r7ojZNgVUaRggOI+KM7jrKxXeSHhogh/TWxYMeONEMqY+hmkobiYQozsGIyg9OYVzO4ZIfoB4I0pQ==
 
 debug@4.x, debug@^4.1.1, debug@^4.3.2, debug@^4.3.4:
   version "4.3.4"
