@@ -2,11 +2,10 @@ import { GraphQLNonNull, GraphQLID, GraphQLString } from 'graphql';
 
 import { mutationWithClientMutationId, toGlobalId } from 'graphql-relay';
 import { pubSub, SUBSCRIPTIONS } from '../../../PubSub';
-import { nodeInterface } from '../../node/NodeInterface';
 
 import TransactionModel from '../TransactionModel';
 
-import TransactionType, { TransactionEdge } from '../TransactionType';
+import { TransactionEdge } from '../TransactionType';
 
 const mutation = mutationWithClientMutationId({
   name: 'TransactionCreate',

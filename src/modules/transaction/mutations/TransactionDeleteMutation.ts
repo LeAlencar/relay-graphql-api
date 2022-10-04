@@ -4,7 +4,6 @@ import { GraphQLNonNull, GraphQLID, GraphQLString } from 'graphql';
 import { fromGlobalId, mutationWithClientMutationId, toGlobalId } from 'graphql-relay';
 
 import TransactionModel from "../TransactionModel"
-import { TransactionEdge } from '../TransactionType';
 
 const mutation = mutationWithClientMutationId({
   name: 'TransactionDelete',
