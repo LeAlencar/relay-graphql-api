@@ -1,9 +1,13 @@
 import { GraphQLObjectType, GraphQLString, GraphQLNonNull } from "graphql";
 import { connectionDefinitions, globalIdField } from "graphql-relay";
 import { nodeInterface, registerTypeLoader } from "../node/typeRegister";
+import { UserType } from "../user/UserType";
 import { load } from "./TransactionLoader";
+import * as UserLoader from '../user/UserLoader'
+import { ITransaction } from "./TransactionModel";
+import { GraphQLContext } from "../../types/types";
 
-export const TransactionType = new GraphQLObjectType({
+export const TransactionType = new GraphQLObjectType<ITransaction, GraphQLContext>({
   name: "Transaction",
   description: "Transaction",
   fields: () => ({
@@ -11,6 +15,10 @@ export const TransactionType = new GraphQLObjectType({
     name: {
       type: new GraphQLNonNull(GraphQLString),
       resolve: ({ name }) => name,
+    },
+    owner: {
+      type: UserType,
+      resolve: (transaction, _, context) => UserLoader.load(context, transaction.owner)
     },
     category: {
       type: new GraphQLNonNull(GraphQLString),
