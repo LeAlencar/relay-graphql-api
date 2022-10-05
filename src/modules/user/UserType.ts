@@ -8,6 +8,8 @@ import { registerTypeLoader, nodeInterface } from '../node/typeRegister'
 import { TransactionConnection } from '../transaction/TransactionType'
 import { load } from './UserLoader'
 import * as TransactionLoader from '../transaction/TransactionLoader'
+import { withFilter } from '@entria/graphql-mongo-helpers'
+import { GraphQLContext } from '../../types/types'
 
 export const UserType = new GraphQLObjectType({
   name: 'User',
@@ -30,10 +32,12 @@ export const UserType = new GraphQLObjectType({
       args: {
         ...connectionArgs
       },
-      resolve: async (user, args, context) => {
+      resolve: async (_, args, context: GraphQLContext) => {
         return await TransactionLoader.loadAll(
           context,
-          user._id
+          withFilter(args, {
+            owner: context.user._id
+          })
         )
       }
     }
