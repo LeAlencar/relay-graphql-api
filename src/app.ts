@@ -43,7 +43,7 @@ router.all(
 );
 
 router.all('/graphql', async ctx => {
-  const { user } = await getUser(ctx.headers.authorization)
+  const { user } = await getUser(ctx.header.authorization)
 
   const request = {
     body: ctx.request.body,
