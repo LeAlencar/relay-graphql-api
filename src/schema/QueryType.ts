@@ -1,11 +1,12 @@
 
 import { GraphQLObjectType } from 'graphql';
-import { connectionArgs } from 'graphql-relay';
 import { TransactionConnection } from '../modules/transaction/TransactionType';
 import { UserType } from '../modules/user/UserType';
 import { nodeField, nodesField } from '../modules/node/typeRegister';
 import * as TransactionLoader from '../modules/transaction/TransactionLoader'
 import * as UserLoader from '../modules/user/UserLoader'
+import { connectionArgs, withFilter } from '@entria/graphql-mongo-helpers';
+import { userInfo } from 'os';
 
 const QueryType = new GraphQLObjectType({
   name: 'Query',
@@ -19,7 +20,12 @@ const QueryType = new GraphQLObjectType({
         ...connectionArgs
       },
       resolve: async (_, args, context) => {
-        return await TransactionLoader.loadAll(context, args)
+        if(!context.user) {
+          return null
+        }
+        return await TransactionLoader.loadAll(context, withFilter(args, {
+          owner: context.user._id
+        }))
       }
     },
     user: {
