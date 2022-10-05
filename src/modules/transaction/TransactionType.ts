@@ -1,7 +1,6 @@
 import { GraphQLObjectType, GraphQLString, GraphQLNonNull } from "graphql";
 import { connectionDefinitions, globalIdField } from "graphql-relay";
-import { nodeInterface } from "../node/NodeInterface";
-import { registerTypeLoader } from "../node/typeRegister";
+import { nodeInterface, registerTypeLoader } from "../node/typeRegister";
 import { load } from "./TransactionLoader";
 
 export const TransactionType = new GraphQLObjectType({

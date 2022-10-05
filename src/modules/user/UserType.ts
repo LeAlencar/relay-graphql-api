@@ -6,8 +6,7 @@ import {
   ThunkObjMap
 } from 'graphql'
 import { connectionDefinitions, globalIdField } from 'graphql-relay'
-import { nodeInterface } from '../node/NodeInterface'
-import { registerTypeLoader } from '../node/typeRegister'
+import { registerTypeLoader, nodeInterface } from '../node/typeRegister'
 import { load } from './UserLoader'
 
 
