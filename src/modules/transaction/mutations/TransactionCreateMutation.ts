@@ -1,19 +1,16 @@
-import { GraphQLNonNull, GraphQLID, GraphQLString } from 'graphql';
+import { GraphQLNonNull, GraphQLString } from 'graphql';
 
 import { mutationWithClientMutationId, toGlobalId } from 'graphql-relay';
 import { pubSub, SUBSCRIPTIONS } from '../../../PubSub';
-
+import { GraphQLContext } from '../../../types/types';
 import TransactionModel from '../TransactionModel';
-
 import { TransactionEdge } from '../TransactionType';
+import * as TransactionLoader from '../TransactionLoader'
 
 const mutation = mutationWithClientMutationId({
   name: 'TransactionCreate',
   description: "Create a new Transaction",
   inputFields: {
-    transactionId: {
-      type: new GraphQLNonNull(GraphQLID),
-    },
     name: {
       type: new GraphQLNonNull(GraphQLString),
     },
@@ -24,37 +21,36 @@ const mutation = mutationWithClientMutationId({
       type: new GraphQLNonNull(GraphQLString),
     }
   },
-  mutateAndGetPayload: async ({ transactionId, name, category, price }) => {
+  mutateAndGetPayload: async ({ name, category, price }, context: GraphQLContext) => {
 
-    const transaction = await new TransactionModel({transactionId, name, category, price}).save();
-
-
-    if (!transaction) {
+    if (!context.user) {
       return {
-        error: 'Transaction not found',
-      };
+        error: 'user not logged'
+      }
     }
+
+    const transaction = await new TransactionModel({
+      name,
+      owner: context.user._id,
+      category,
+      price
+    }).save();
 
     await pubSub.publish(SUBSCRIPTIONS.NEW_TRANSACTION, { transactionId: transaction._id})
 
     return {
       error: null,
       success: 'Transaction created',
-      transaction
+      id: transaction._id
     };
-
-
-
   },
-
   outputFields: {
   transactionEdge: {
       type: TransactionEdge,
-      resolve: async (response) => {
+      resolve: async ({ id }, _, context) => {
         // Load new edge from loader
-        const transaction = response.transaction
+        const transaction = await TransactionLoader.load(context, id)
 
-        // Returns null if no node was loaded
         if (!transaction) {
           return null;
         }
@@ -68,10 +64,12 @@ const mutation = mutationWithClientMutationId({
     error: {
       type: GraphQLString,
       resolve: response => response.error
+    },
+    success: {
+      type: GraphQLString,
+      resolve: response => response.success
     }
   },
-
-
 });
 
 export default mutation;
