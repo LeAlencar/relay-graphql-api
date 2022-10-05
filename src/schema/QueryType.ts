@@ -1,9 +1,8 @@
 
-import { GraphQLID, GraphQLNonNull, GraphQLObjectType } from 'graphql';
-import { connectionArgs, connectionFromArray } from 'graphql-relay';
+import { GraphQLObjectType } from 'graphql';
+import { connectionArgs } from 'graphql-relay';
 import { TransactionConnection } from '../modules/transaction/TransactionType';
 import { UserType } from '../modules/user/UserType';
-import UserModel from '../modules/user/UserModel';
 import { nodeField, nodesField } from '../modules/node/typeRegister';
 import * as TransactionLoader from '../modules/transaction/TransactionLoader'
 import * as UserLoader from '../modules/user/UserLoader'
