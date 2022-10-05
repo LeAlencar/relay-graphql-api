@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { GraphQLNonNull, GraphQLID, GraphQLString } from 'graphql';
-
 import { fromGlobalId, mutationWithClientMutationId, toGlobalId } from 'graphql-relay';
-
+import { GraphQLContext } from '../../../types/types';
 import TransactionModel from "../TransactionModel"
+import * as TransactionLoader from '../TransactionLoader'
 
 const mutation = mutationWithClientMutationId({
   name: 'TransactionDelete',
@@ -13,10 +12,15 @@ const mutation = mutationWithClientMutationId({
       type: new GraphQLNonNull(GraphQLID),
     },
   },
-  mutateAndGetPayload: async ({ transactionId }) => {
-    const transaction = await TransactionModel.findById({
-      _id: fromGlobalId(transactionId).id
-    });
+  mutateAndGetPayload: async ({ transactionId }, context: GraphQLContext) => {
+
+    if(!context.user) {
+      return {
+        error: 'user not logged'
+      }
+    }
+
+    const transaction = await TransactionLoader.load(context, fromGlobalId(transactionId).id);
 
     if (!transaction) {
       return {
@@ -29,7 +33,7 @@ const mutation = mutationWithClientMutationId({
     });
 
     return {
-      transaction,
+      id: transaction.id,
       error: null,
       success: 'Transaction removed',
     };
@@ -38,8 +42,9 @@ const mutation = mutationWithClientMutationId({
   outputFields: {
     transactionId: {
         type: GraphQLID,
-        resolve: async (response) => {
-          const transaction = response.transaction
+        resolve: async ({ id }, _, context) => {
+          const transaction = await TransactionLoader.load(context, id)
+
           if (!transaction) {
             return null
           }
@@ -50,6 +55,10 @@ const mutation = mutationWithClientMutationId({
       error: {
         type: GraphQLString,
         resolve: response => response.error
+      },
+      success: {
+        type: GraphQLString,
+        resolve: response => response.success
       }
     },
 });

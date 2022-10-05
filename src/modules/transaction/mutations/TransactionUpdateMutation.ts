@@ -1,11 +1,11 @@
 import { GraphQLNonNull, GraphQLID, GraphQLString } from 'graphql';
 
 import { fromGlobalId, mutationWithClientMutationId } from 'graphql-relay';
+import { GraphQLContext } from '../../../types/types';
 
 import TransactionModel from '../TransactionModel';
-
-
 import TransactionType from '../TransactionType';
+import * as TransactionLoader from '../TransactionLoader'
 
 const mutation = mutationWithClientMutationId({
   name: 'TransactionUpdate',
@@ -24,13 +24,15 @@ const mutation = mutationWithClientMutationId({
       type: new GraphQLNonNull(GraphQLString),
     }
   },
-  mutateAndGetPayload: async ({ transactionId, name, category, price }) => {
-    const transaction = await TransactionModel.findById({
-      _id: fromGlobalId(transactionId).id,
-      name,
-      category,
-      price
-    });
+  mutateAndGetPayload: async ({ transactionId, name, category, price }, context: GraphQLContext) => {
+
+    if(!context.user) {
+      return {
+        error: 'user not logged'
+      }
+    }
+
+    const transaction = await TransactionLoader.load(context, fromGlobalId(transactionId).id);
 
     if (!transaction) {
       return {
@@ -40,7 +42,7 @@ const mutation = mutationWithClientMutationId({
 
     await TransactionModel.updateOne(
       {
-        _id: transaction._id
+        _id: transaction.id
       },
       {
         $set: {
