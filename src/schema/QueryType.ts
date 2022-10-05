@@ -2,10 +2,10 @@
 import { GraphQLID, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { connectionArgs, connectionFromArray } from 'graphql-relay';
 import { TransactionConnection } from '../modules/transaction/TransactionType';
-import { nodeField, nodesField } from '../modules/node/NodeInterface'
 import TransactionModel from '../modules/transaction/TransactionModel';
 import { UserType } from '../modules/user/UserType';
 import UserModel from '../modules/user/UserModel';
+import { nodeField, nodesField } from '../modules/node/typeRegister';
 
 const QueryType = new GraphQLObjectType({
   name: 'Query',
