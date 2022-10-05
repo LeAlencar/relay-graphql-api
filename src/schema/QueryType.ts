@@ -2,10 +2,11 @@
 import { GraphQLID, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { connectionArgs, connectionFromArray } from 'graphql-relay';
 import { TransactionConnection } from '../modules/transaction/TransactionType';
-import TransactionModel from '../modules/transaction/TransactionModel';
 import { UserType } from '../modules/user/UserType';
 import UserModel from '../modules/user/UserModel';
 import { nodeField, nodesField } from '../modules/node/typeRegister';
+import * as TransactionLoader from '../modules/transaction/TransactionLoader'
+import * as UserLoader from '../modules/user/UserLoader'
 
 const QueryType = new GraphQLObjectType({
   name: 'Query',
@@ -18,23 +19,14 @@ const QueryType = new GraphQLObjectType({
       args: {
         ...connectionArgs
       },
-      resolve: async (_, args) => {
-        const data = await TransactionModel.find({})
-        return connectionFromArray(data, args)
+      resolve: async (_, args, context) => {
+        return await TransactionLoader.loadAll(context, args)
       }
     },
     user: {
       type: UserType,
-      args: {
-        id: {
-          type: new GraphQLNonNull(GraphQLID)
-        }
-      },
-      resolve: async (_, args) => {
-
-        const user = await UserModel.findOne({ _id: args.id })
-        return user;
-
+      resolve: async (_, args, context) => {
+        return await UserLoader.load(context, context.user?._id)
       }
     }
   })

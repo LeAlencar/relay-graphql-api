@@ -2,20 +2,17 @@ import {
   GraphQLString,
   GraphQLNonNull,
   GraphQLObjectType,
-  GraphQLInputFieldConfig,
-  ThunkObjMap
 } from 'graphql'
 import { connectionDefinitions, globalIdField } from 'graphql-relay'
 import { registerTypeLoader, nodeInterface } from '../node/typeRegister'
 import { load } from './UserLoader'
-
 
 export const UserType = new GraphQLObjectType({
   name: 'User',
   description: 'User type',
   interfaces: () => [nodeInterface],
   fields: () => ({
-    id: globalIdField('User', user => user._id),
+    id: globalIdField('User'),
     username: {
       type: new GraphQLNonNull(GraphQLString),
       description: `User's username`,
@@ -28,21 +25,6 @@ export const UserType = new GraphQLObjectType({
     }
   })
 })
-
-export const userInputType: ThunkObjMap<GraphQLInputFieldConfig> = {
-  email: {
-    type: new GraphQLNonNull(GraphQLString),
-    description: `User's email`
-  },
-  username: {
-    type: new GraphQLNonNull(GraphQLString),
-    description: `User's username`
-  },
-  password: {
-    type: new GraphQLNonNull(GraphQLString),
-    description: `User's password`
-  }
-}
 
 registerTypeLoader(UserType, load)
 
