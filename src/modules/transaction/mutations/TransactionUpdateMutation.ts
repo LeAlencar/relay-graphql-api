@@ -1,10 +1,10 @@
 import { GraphQLNonNull, GraphQLID, GraphQLString } from 'graphql';
 
-import { fromGlobalId, mutationWithClientMutationId } from 'graphql-relay';
+import { fromGlobalId, mutationWithClientMutationId, toGlobalId } from 'graphql-relay';
 import { GraphQLContext } from '../../../types/types';
 
 import TransactionModel from '../TransactionModel';
-import TransactionType from '../TransactionType';
+import { TransactionEdge } from '../TransactionType';
 import * as TransactionLoader from '../TransactionLoader'
 
 const mutation = mutationWithClientMutationId({
@@ -61,9 +61,24 @@ const mutation = mutationWithClientMutationId({
   },
 
   outputFields: {
-    transaction: {
-      type: TransactionType,
-      resolve: response => response.transaction
+    transactionEdge: {
+      type: TransactionEdge,
+      resolve: async ({ id }, _, context) => {
+        // Load new edge from loader
+        const transaction = await TransactionLoader.load(context, id)
+        if (!transaction) {
+          return null;
+        }
+
+        return {
+          cursor: toGlobalId('Transaction', transaction._id),
+          node: transaction,
+        };
+      },
+    },
+    success: {
+      type: GraphQLString,
+      resolve: response => response.success
     },
     error: {
       type: GraphQLString,
