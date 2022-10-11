@@ -52,6 +52,7 @@ const mutation = mutationWithClientMutationId({
         },
       },
     );
+    TransactionLoader.clearCache(context, fromGlobalId(transactionId).id)
 
     return {
       id: transaction._id,
