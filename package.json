@@ -8,7 +8,9 @@
     "prepare": "husky install",
     "lint": "eslint src/**/*.ts",
     "format": "eslint src/**/*.ts --fix",
-    "jest": "jest"
+    "jest": "jest",
+    "build": "tsc",
+    "start": "node dist/src/server.js"
   },
   "lint-staged": {
     "src/**/*.{js,ts,tsx}": [
