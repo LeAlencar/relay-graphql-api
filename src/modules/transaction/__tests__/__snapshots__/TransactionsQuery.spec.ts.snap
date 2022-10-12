@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should return transaction from logged user only 1`] = `
+{
+  "transactions": {
+    "edges": [
+      {
+        "node": {
+          "category": "Category 0",
+          "name": "Transaction#0",
+          "owner": {
+            "id": "FROZEN-ID",
+            "username": "user#1",
+          },
+          "price": "100.00",
+        },
+      },
+    ],
+  },
+}
+`;
