@@ -9,7 +9,7 @@
     "lint": "eslint src/**/*.ts",
     "format": "eslint src/**/*.ts --fix",
     "jest": "jest",
-    "build": "tsc",
+    "build": "tsc --p tsconfig.build.json",
     "start": "node dist/src/server.js"
   },
   "lint-staged": {
