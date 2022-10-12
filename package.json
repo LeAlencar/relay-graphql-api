@@ -11,7 +11,7 @@
     "jest": "jest"
   },
   "lint-staged": {
-    "src/**/*": [
+    "src/**/*.{js,ts,tsx}": [
       "yarn lint --fix"
     ]
   },
