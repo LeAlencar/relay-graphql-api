@@ -10,7 +10,7 @@
     "format": "eslint src/**/*.ts --fix",
     "jest": "jest",
     "build": "tsc --p tsconfig.build.json",
-    "start": "node dist/src/server.js"
+    "start": "node dist/server.js"
   },
   "lint-staged": {
     "src/**/*.{js,ts,tsx}": [
