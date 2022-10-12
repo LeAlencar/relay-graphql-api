@@ -20,5 +20,5 @@ export const getUser = async (token: string | null | undefined) => {
 }
 
 export const generateJwtToken = (user: IUser) => {
-  return `JWT ${jwt.sign({ id: user._id }, jwtSecret)}`
+  return `JWT ${jwt.sign({ id: user._id }, `${jwtSecret}`)}`
 }
